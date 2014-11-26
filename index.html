@@ -2,26 +2,17 @@
 <html>
   <head>
     <title>quotefully</title>
+    <meta charset="UTF-8"/>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="vendor/underscore.js"></script>
     <script type="text/javascript" src="base.js"></script>
     <link rel="stylesheet" href="base.css">
   </head>
 
   <body>
-    <div id="container">
-      
-      <div id="quote" class="editor-container">
-        <textarea class="editor" type="text" placeholder="Full Quote"></textarea>
-        <button>done</button>
-      </div>
-      
-      <div id="text" class="editor-container">
-        <textarea class="editor" type="text" placeholder="..."></textarea>
-        <button>done</button>
-      </div>
-
-      <div id="preview"></div>
-
+    <div class="container">
+      <blockquote id="original"></blockquote>
+      <textarea id="editor"></textarea>
     </div>
   </body>
 

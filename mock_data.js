@@ -1,0 +1,3 @@
+var quote1 = "These are all related: You can’t address climate change without fixing agriculture, you can’t fix health without improving diet, you can’t improve diet without addressing income, and so on. The production, marketing and consumption of food is key to nearly everything."
+
+var quote2 = "We must address ourselves seriously, and not a little fearfully, to the problem of human scale. What is it? How do we stay within it? What sort of technology enhances our humanity? What sort reduces it? The reason is simply that we cannot live except within limits, and these limits are of many kinds: spatial, material, moral, spiritual. The world has room for many people who are content to live as humans, but only for a few intent upon living as giants or as gods."
