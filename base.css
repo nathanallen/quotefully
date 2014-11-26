@@ -1,0 +1,34 @@
+body {
+  background-color: antiquewhite;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#container {
+  margin: 0 auto;
+  padding: 1em;
+  border: 1px dotted black;
+  min-height: 800px;
+  width: 800px;
+  background-color: lightgray;
+}
+
+.editor-container {
+  border: 1px dotted black;
+  margin-bottom: 1em;
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+}
+
+/*.editor-container input[type=submit] {
+  float: right;
+}*/
+
+#preview {
+  border: 1px dotted black;
+}
