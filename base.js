@@ -91,30 +91,34 @@ function Quote(original) {
   var subQuoteIndexes = [];
 
   function meldIn(start, end) {
-    var start_meld = start,
-        end_meld = end,
-        this_start,
+    var this_start,
         this_end;
+
     for (var i=0; i<subQuoteIndexes.length; i++){
       if (!subQuoteIndexes[i]){
         continue
       }
       this_start = subQuoteIndexes[i][0];
       this_end = subQuoteIndexes[i][1];
-      if (start_meld < this_start && this_end < end_meld) {
+      if (start < this_start && this_end < end) {
+        // subsume
         subQuoteIndexes[i] = undefined;
         continue
       }
-      if (this_start <= start_meld-1 && start_meld-1 <= this_end) {
+      if (this_start-1 <= end && end <= this_end) {
+        // extend from start
         subQuoteIndexes[i] = undefined;
-        start_meld = Math.min(start_meld, this_start);
+        end = Math.max(end, this_end);
+        continue;
       }
-      if (this_start-1 <= end_meld && end_meld <= this_end) {
+      if (this_start <= start && start <= this_end+1 ) {
+        // extend from end
         subQuoteIndexes[i] = undefined;
-        end_meld = Math.max(end_meld, this_end);
+        start = Math.min(start, this_start);
+        continue;
       }
     }
-    subQuoteIndexes.push([start_meld, end_meld])
+    subQuoteIndexes.push([start, end])
   }
 
   function exclude(start, end) {
