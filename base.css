@@ -19,8 +19,8 @@ textarea#editor {
   min-height: 6em;
 }
 
-blockquote, #edit-panel i {
-  cursor: pointer;
+blockquote  {
+  cursor: text;
 }
 
 span#quote.expanded span {
@@ -68,4 +68,8 @@ span#quote.collapsed span.elide-end:before {
 #edit-panel li {
   display: inline-block;
   margin: 0 1em;
+}
+
+#edit-panel i {
+  cursor: pointer;
 }
