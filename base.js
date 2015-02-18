@@ -24,9 +24,9 @@ $(document).ready(function(){
     $quote_words = $quote_words.add($("<span>" + c + "</span>"))
   })
 
-  $('blockquote#original').append($quote_words)
+  $('blockquote #quote').append($quote_words)
 
-  $('blockquote#original').mouseup('blockquote#original span', function(e){
+  $('blockquote').mouseup('blockquote span', function(e){
     // TODO: handle doubleclick
     var $hoverSpan = $('span:hover');
     var getSelect = document.getSelection();

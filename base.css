@@ -19,29 +19,29 @@ textarea#editor {
   min-height: 6em;
 }
 
-blockquote#original:hover {
+blockquote:hover {
   cursor: pointer;
 }
 
-span {
+span#quote span {
   color: darkgray;
 }
 
-span.selected {
+span#quote span.selected {
   color: black;
   background-color: #FE0;
 }
 
-span:hover {
+span#quote span:hover {
   color: black;
   background-color: #FD0;
 }
 
-span::selection {
+span#quote span::selection {
   background-color: #FE7;
 }
 
-span::-moz-selection {
+span#quote span::-moz-selection {
   /*color: gold;*/
   background-color: #FE7;
 }
