@@ -34,42 +34,30 @@ $(document).ready(function(){
   // handle highlighting
   $('blockquote span#quote').mouseup('blockquote span', function(e){
 
+    if (!$(e.target).hasClass('char')){
+      return false;
+    }
+
+    start_and_end = findIndexesOfHighlight(e)
+    var start = start_and_end[0],
+        end = start_and_end[1];
+    $selected_chars = $quote_chars.slice(start, end+1)
+
     if(insertion_mode) {
-      start_and_end = findIndexesOfHighlight(e)
-      var start = start_and_end[0],
-          end = start_and_end[1];
-
-      $selected_chars = $quote_chars.slice(start, end+1)
-      $selected_chars.removeClass('selected')
-
-      var $input = $('<input autofocus>')
-      $input.keypress(function(e){
-        var key = e.which || e.keyCode;
-        if (key === 13){
-          my_quote.insertAnnotation($(this).val(), start, end)
-        }
-      })
-      $selected_chars.first().before($input)
-
-      return
+      renderInsertArea($selected_chars, my_quote)
+      return;
     }
 
     if ($(this).hasClass('expanded')) {
-      highlight(e, my_quote, $quote_chars)
+      highlight(start, end, $selected_chars, my_quote)
     }
 
   })
   
 });
 
-function highlight(e, my_quote, $quote_chars) {
-  start_and_end = findIndexesOfHighlight(e)
-  var start = start_and_end[0],
-      end = start_and_end[1];
-
-  $selected_chars = $quote_chars.slice(start, end+1)
-
-  if (my_quote.isInclusive(start,end)) {
+function highlight(start, end, $selected_chars, my_quote) {
+  if (my_quote.isInclusive(start, end)) {
     my_quote.removeSubQuote(start, end)
     $selected_chars.removeClass('selected')
   } else {
@@ -110,7 +98,7 @@ function findIndexesOfHighlight() {
 
 function renderQuote(my_quote) {
   quote_chars = my_quote.chars.map(function(c,i){
-    return "<span>" + c + "</span>"
+    return "<span class='char'>" + c + "</span>"
   })
   return $('blockquote #quote').append(quote_chars).children()
 }
@@ -136,6 +124,42 @@ function renderEllision(my_quote, $quote_chars) {
     $quote_chars.eq(last[1]).addClass('elide-start')
     $quote_chars.eq(next[0]).addClass('elide-end')
   }
+}
+
+function renderInsertArea($selected_chars, my_quote) {
+
+    $selected_chars.removeClass('selected')
+                   .addClass('omit');
+
+    var buildDragBracket = function(bracket_side) {
+      var $drag_bracket = $('<span class="drag-bracket"></span>')
+            .addClass('bracket-' + bracket_side)
+            .text(bracket_side === 'right' ? '[' : ']')
+      return $drag_bracket
+    }
+
+    var $bracket_right = buildDragBracket('right'),
+        $bracket_left = buildDragBracket('left');
+
+
+    var $input = $('<input autofocus>')
+
+    $selected_chars.first()
+                      .before($bracket_right)
+                      .before($input)
+                      .end()
+                    .last()
+                      .after($bracket_left)
+
+    $input.click(function(e){
+      alert()
+    }).keypress(function(e){
+      var key = e.which || e.keyCode;
+      if (key === 13){
+        my_quote.insertAnnotation($(this).val(), start, end)
+      }
+    })
+
 }
 
 function Quote(original) {

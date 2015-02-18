@@ -23,25 +23,25 @@ blockquote  {
   cursor: text;
 }
 
-span#quote.expanded span {
+span#quote.expanded span.char {
   color: darkgray;
 }
 
-span#quote.expanded span.selected {
+span#quote.expanded span.char.selected {
   color: black;
   background-color: #FE0;
 }
 
-span#quote.expanded span:hover {
+span#quote.expanded span.char:hover {
   color: black;
   background-color: #FD0;
 }
 
-span#quote.expanded span::selection {
+span#quote.expanded span.char::selection {
   background-color: #FE7;
 }
 
-span#quote.expanded span::-moz-selection {
+span#quote.expanded span.char::-moz-selection {
   /*color: gold;*/
   background-color: #FE7;
 }
@@ -93,4 +93,13 @@ input {
   border-bottom: 2px dashed #5B9DD9;
   outline-color: none;
   outline-style: none;
+}
+
+.drag-bracket {
+  cursor: pointer;
+  background: none;
+}
+
+.omit {
+  display: none !important;
 }
