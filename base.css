@@ -93,11 +93,7 @@ input {
   border-bottom: 2px dashed #5B9DD9;
   outline-color: none;
   outline-style: none;
-}
-
-.drag-bracket {
-  cursor: pointer;
-  background: none;
+  font-size: inherit;
 }
 
 .omit {

@@ -18,15 +18,15 @@ $(document).ready(function(){
   $quote_chars = renderQuote(my_quote)
 
   // expand/collapse quote sections & toggle buttons
-  $expand_btn = $('#edit-panel .expand').hide()
-  $collapse_btn = $('#edit-panel .collapse').hide()
-  $('#edit-panel .expand, #edit-panel .collapse').click(function(){
-    $('span#quote span:not(.selected), .collapse, .expand').toggle()
+  $expand_btn = $('#edit-panel .btn#expand').hide()
+  $collapse_btn = $('#edit-panel .btn#collapse').hide()
+  $('#edit-panel .btn#expand, #edit-panel .btn#collapse').click(function(){
+    $('span#quote span:not(.selected), .btn#collapse, .btn#expand').toggle()
     $('span#quote').toggleClass('collapsed expanded')
   })
 
   // handle insertion_mode
-  $('#edit-panel .insert').click(function(){
+  $('#edit-panel .btn#insert').click(function(){
     $(this).toggleClass('active')
     insertion_mode = !insertion_mode;
   })
@@ -131,25 +131,9 @@ function renderInsertArea($selected_chars, my_quote) {
     $selected_chars.removeClass('selected')
                    .addClass('omit');
 
-    var buildDragBracket = function(bracket_side) {
-      var $drag_bracket = $('<span class="drag-bracket"></span>')
-            .addClass('bracket-' + bracket_side)
-            .text(bracket_side === 'right' ? '[' : ']')
-      return $drag_bracket
-    }
+    var $input = $('<span class="insert">[<input autofocus>]</span>')
 
-    var $bracket_right = buildDragBracket('right'),
-        $bracket_left = buildDragBracket('left');
-
-
-    var $input = $('<input autofocus>')
-
-    $selected_chars.first()
-                      .before($bracket_right)
-                      .before($input)
-                      .end()
-                    .last()
-                      .after($bracket_left)
+    $selected_chars.first().before($input)
 
     $input.click(function(e){
       alert()
