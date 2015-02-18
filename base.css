@@ -61,15 +61,26 @@ span#quote.collapsed span.elide-end:before {
   margin: 0 auto;
 }
 
-#edit-panel ul {
-  margin: 0;
-}
-
-#edit-panel li {
+#edit-panel a.btn {
+  background: #FFF;
   display: inline-block;
-  margin: 0 1em;
+  border: 1px solid black;
+  border-radius: 1em;
+  padding: 0 .75em;
 }
 
 #edit-panel i {
   cursor: pointer;
+}
+
+#edit-panel small {
+  padding-left: .5em;
+}
+
+/* custom icon for .insert */
+.fa-brackets:before {
+  position: relative;
+  content: "[+]";
+  font-size: .8em;
+  top: -.1em;
 }
