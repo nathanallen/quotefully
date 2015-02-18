@@ -10,6 +10,9 @@ var $selected_chars,
 var $expand_btn,
     $collapse_btn;
 
+// modes
+var insertion_mode = false;
+
 $(document).ready(function(){
   var my_quote = new Quote(quote)
   $quote_chars = renderQuote(my_quote)
@@ -22,11 +25,39 @@ $(document).ready(function(){
     $('span#quote').toggleClass('collapsed expanded')
   })
 
+  // handle insertion_mode
+  $('#edit-panel .insert').click(function(){
+    $(this).toggleClass('active')
+    insertion_mode = !insertion_mode;
+  })
+
   // handle highlighting
   $('blockquote span#quote').mouseup('blockquote span', function(e){
+
+    if(insertion_mode) {
+      start_and_end = findIndexesOfHighlight(e)
+      var start = start_and_end[0],
+          end = start_and_end[1];
+
+      $selected_chars = $quote_chars.slice(start, end+1)
+      $selected_chars.removeClass('selected')
+
+      var $input = $('<input autofocus>')
+      $input.keypress(function(e){
+        var key = e.which || e.keyCode;
+        if (key === 13){
+          my_quote.insertAnnotation($(this).val(), start, end)
+        }
+      })
+      $selected_chars.first().before($input)
+
+      return
+    }
+
     if ($(this).hasClass('expanded')) {
       highlight(e, my_quote, $quote_chars)
     }
+
   })
   
 });
@@ -34,7 +65,7 @@ $(document).ready(function(){
 function highlight(e, my_quote, $quote_chars) {
   start_and_end = findIndexesOfHighlight(e)
   var start = start_and_end[0],
-      end = start_and_end[1]
+      end = start_and_end[1];
 
   $selected_chars = $quote_chars.slice(start, end+1)
 
@@ -246,6 +277,11 @@ function Quote(original) {
   this.indexes = function(){
     console.log(subQuoteIndexes, subQuoteIndexes.toString())
     return _.clone(subQuoteIndexes);
+  }
+
+  this.insertAnnotation = function(note, start, end) {
+    console.log(note, start, end)
+    // TODO   
   }
 
 }
