@@ -1,0 +1,9 @@
+{
+  "name": "quotefully",
+  "version": "0.1",
+  "ignore": [],
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "underscore": "~1.7.0"
+  }
+}
