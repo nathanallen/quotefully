@@ -1,93 +1,116 @@
-var quote1 = "These are all related: You can’t address climate change without fixing agriculture, you can’t fix health without improving diet, you can’t improve diet without addressing income, and so on. The production, marketing and consumption of food is key to nearly everything."
-var quote2 = "We must address ourselves seriously, and not a little fearfully, to the problem of human scale. What is it? How do we stay within it? What sort of technology enhances our humanity? What sort reduces it? The reason is simply that we cannot live except within limits, and these limits are of many kinds: spatial, material, moral, spiritual. The world has room for many people who are content to live as humans, but only for a few intent upon living as giants or as gods."
+// var quote = "These are all related: You can’t address climate change without fixing agriculture, you can’t fix health without improving diet, you can’t improve diet without addressing income, and so on. The production, marketing and consumption of food is key to nearly everything."
+var quote = "We must address ourselves seriously, and not a little fearfully, to the problem of human scale. What is it? How do we stay within it? What sort of technology enhances our humanity? What sort reduces it? The reason is simply that we cannot live except within limits, and these limits are of many kinds: spatial, material, moral, spiritual. The world has room for many people who are content to live as humans, but only for a few intent upon living as giants or as gods."
 
-var the_quote = quote2
-
-var quote_obj = [];
-
-var quote,
-    subquote = "",
-    $startSelectElement,
-    $endSelectElement,
-    $selected_words,
-    $quote_words = $([]),
-    quote_words,
-    quote_chars,
-    selections = [],
+//temp globals
+var $selected_chars,
+    $quote_chars,
     my_quote;
+
+// jQuery objects
+var $expand_btn,
+    $collapse_btn;
+
 $(document).ready(function(){
-  my_quote = new Quote(the_quote)
-  //setup
-  quote_words = splitQuote(the_quote)
-  quote_words.forEach(function(c,i){
-    // weird way of doing this...
-    $quote_words = $quote_words.add($("<span>" + c + "</span>"))
+  var my_quote = new Quote(quote)
+  $quote_chars = renderQuote(my_quote)
+
+  // expand/collapse quote sections & toggle buttons
+  $expand_btn = $('#edit-panel .expand').hide()
+  $collapse_btn = $('#edit-panel .collapse').hide()
+  $('#edit-panel .expand, #edit-panel .collapse').click(function(){
+    $('span#quote span:not(.selected), .collapse, .expand').toggle()
+    $('span#quote').toggleClass('collapsed expanded')
   })
 
-  $('blockquote #quote').append($quote_words)
-
-  $('blockquote').mouseup('blockquote span', function(e){
-    // TODO: handle doubleclick
-    var $hoverSpan = $('span:hover');
-    var getSelect = document.getSelection();
-    $endSelectElement = $(getSelect.focusNode.parentElement)
-    $startSelectElement = $(getSelect.anchorNode.parentElement)
-
-    if ($startSelectElement.is($endSelectElement) && $hoverSpan.length) {
-      // switch to the current hover, it's more accurate...
-      $startSelectElement = $endSelectElement = $hoverSpan;
+  // handle highlighting
+  $('blockquote span#quote').mouseup('blockquote span', function(e){
+    if ($(this).hasClass('expanded')) {
+      highlight(e, my_quote, $quote_chars)
     }
-
-    // set indexes
-    var startIdx,
-        start = startIdx = $startSelectElement.index(),
-        end = $endSelectElement.index();
-
-    if (start > end) {
-      start = end;
-      end = startIdx;
-    }
-
-    $selected_words = selectWordElements(start, end)
-
-    var is_removal = (
-            $startSelectElement.hasClass('selected') &&
-            $endSelectElement.hasClass('selected') &&
-            my_quote.isInclusive(start,end)
-        )
-
-    if (is_removal) {
-      my_quote.removeSubQuote(start, end)
-      $selected_words.removeClass('selected')
-    } else {
-      my_quote.addSubQuote(start, end)
-      $selected_words.addClass('selected')
-    }
-
-    // var text = getSelect.toString()//selectedText(start, end)
-
-    $('textarea#editor').val(my_quote.toString())
-    getSelect.empty()
   })
   
 });
 
-function splitQuote(quote){
-  return quote.trim().split('')
-  return quote.trim().split(/\s+/)
+function highlight(e, my_quote, $quote_chars) {
+  start_and_end = findIndexesOfHighlight(e)
+  var start = start_and_end[0],
+      end = start_and_end[1]
+
+  $selected_chars = $quote_chars.slice(start, end+1)
+
+  if (my_quote.isInclusive(start,end)) {
+    my_quote.removeSubQuote(start, end)
+    $selected_chars.removeClass('selected')
+  } else {
+    my_quote.addSubQuote(start, end)
+    $selected_chars.addClass('selected')
+  }
+
+  renderEllision(my_quote, $quote_chars)
 }
 
-function selectWordElements(start, end){
-  return $quote_words.slice(start, end+1)
+function findIndexesOfHighlight() {
+  // TODO: handle doubleclick
+  var $hoverSpan = $('span#quote span:hover');
+  var getSelect = document.getSelection();
+  $endSelectElement = $(getSelect.focusNode.parentElement)
+  $startSelectElement = $(getSelect.anchorNode.parentElement)
+  getSelect.empty()
+  
+  // if only one element
+  if ($startSelectElement.is($endSelectElement) && $hoverSpan.length) {
+    // switch to the current hover, it's more accurate...
+    $startSelectElement = $endSelectElement = $hoverSpan;
+  }
+  // TODO refinement: if select action extended outside quote area
+
+  // set indexes
+  var startIdx,
+      start = startIdx = $startSelectElement.index(),
+      end = $endSelectElement.index();
+
+  if (start > end) {
+    start = end;
+    end = startIdx;
+  }
+
+  return [start, end]
 }
 
-function selectedText(start, end){
-  return quote_words.slice(start, end+1).join(' ')
+function renderQuote(my_quote) {
+  quote_chars = my_quote.chars.map(function(c,i){
+    return "<span>" + c + "</span>"
+  })
+  return $('blockquote #quote').append(quote_chars).children()
+}
+
+function renderEllision(my_quote, $quote_chars) {
+  var first, second, start, end,
+      qs = my_quote.indexes();
+
+  if (qs.length) {
+    $collapse_btn.show()
+    $expand_btn.hide()
+  } else {
+    $collapse_btn.hide()
+    $expand_btn.hide()
+  }
+
+  $quote_chars.removeClass('elide-start elide-end')
+
+  while(qs.length) {
+    last = qs.shift();
+    next = qs[0]
+    if (last === undefined || next == undefined) { break }
+    $quote_chars.eq(last[1]).addClass('elide-start')
+    $quote_chars.eq(next[0]).addClass('elide-end')
+  }
 }
 
 function Quote(original) {
   var self = this;
-  this.original = original || ""
+  this.original = original.trim() || ""
+  this.chars = this.original.split('')
   var subQuoteIndexes = [];
 
   function meldIn(start, end) {
@@ -222,6 +245,7 @@ function Quote(original) {
 
   this.indexes = function(){
     console.log(subQuoteIndexes, subQuoteIndexes.toString())
+    return _.clone(subQuoteIndexes);
   }
 
 }

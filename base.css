@@ -19,29 +19,53 @@ textarea#editor {
   min-height: 6em;
 }
 
-blockquote:hover {
+blockquote, #edit-panel i {
   cursor: pointer;
 }
 
-span#quote span {
+span#quote.expanded span {
   color: darkgray;
 }
 
-span#quote span.selected {
+span#quote.expanded span.selected {
   color: black;
   background-color: #FE0;
 }
 
-span#quote span:hover {
+span#quote.expanded span:hover {
   color: black;
   background-color: #FD0;
 }
 
-span#quote span::selection {
+span#quote.expanded span::selection {
   background-color: #FE7;
 }
 
-span#quote span::-moz-selection {
+span#quote.expanded span::-moz-selection {
   /*color: gold;*/
   background-color: #FE7;
+}
+
+span#quote.collapsed span.elide-start:after {
+  content: " [...";
+  display: inline;
+}
+
+span#quote.collapsed span.elide-end:before {
+  content: "] ";
+  display: inline;
+}
+
+#edit-panel  {
+  width: 50%;
+  margin: 0 auto;
+}
+
+#edit-panel ul {
+  margin: 0;
+}
+
+#edit-panel li {
+  display: inline-block;
+  margin: 0 1em;
 }
