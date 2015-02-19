@@ -128,26 +128,34 @@ function renderEllision(my_quote, $quote_chars) {
 
 function renderInsertArea(start, end, $selected_chars, my_quote) {
 
-    $selected_chars.toggleClass('selected omit')
+    $selected_chars//.toggleClass('selected omit')
+                  .removeClass('selected')
+                   .addClass('omit');
 
-    var $input = $('<span class="insert">[<input autofocus>]<i class="fa fa-times-circle delete"></i></span>')
+    var $insert = $('<span class="insert">[<input>]<i class="fa fa-times-circle delete"></i></span>')
 
-    $('i.delete', $input).click(function(){
-      $input.remove();
+    var $del = $('i.delete', $insert)
+    $del.click(function(){
+      $insert.remove();
       $selected_chars.toggleClass('selected omit')
     })
 
-    $selected_chars.first().before($input)
+    $selected_chars.first().before($insert)
 
-    $input.click(function(e){
-      alert()
-    }).keypress(function(e){
-      var key = e.which || e.keyCode;
-      if (key === 13){
-        $(this).blur()
-        my_quote.insertAnnotation($(this).val(), start, end)
-      }
-    })
+    $('input', $insert).focus()
+      .click(function(e){
+        $del.show()
+      })
+      .blur(function(e){
+        $del.hide()
+      })
+      .keypress(function(e){
+        var key = e.which || e.keyCode;
+        if (key === 13){
+          $del.hide()
+          my_quote.insertAnnotation($(this).val(), start, end)
+        }
+      })
 
 }
 
