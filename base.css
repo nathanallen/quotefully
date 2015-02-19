@@ -94,6 +94,21 @@ input {
   outline-color: none;
   outline-style: none;
   font-size: inherit;
+  display: inline-block;
+}
+
+span.insert {
+  display: inline-block;
+  position: relative;
+}
+
+span.insert i {
+  color: red;
+  font-size: .8em;
+}
+
+span.insert i:hover {
+  cursor: pointer;
 }
 
 .omit {

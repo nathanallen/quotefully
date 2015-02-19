@@ -44,7 +44,7 @@ $(document).ready(function(){
     $selected_chars = $quote_chars.slice(start, end+1)
 
     if(insertion_mode) {
-      renderInsertArea($selected_chars, my_quote)
+      renderInsertArea(start, end, $selected_chars, my_quote)
       return;
     }
 
@@ -126,12 +126,16 @@ function renderEllision(my_quote, $quote_chars) {
   }
 }
 
-function renderInsertArea($selected_chars, my_quote) {
+function renderInsertArea(start, end, $selected_chars, my_quote) {
 
-    $selected_chars.removeClass('selected')
-                   .addClass('omit');
+    $selected_chars.toggleClass('selected omit')
 
-    var $input = $('<span class="insert">[<input autofocus>]</span>')
+    var $input = $('<span class="insert">[<input autofocus>]<i class="fa fa-times-circle delete"></i></span>')
+
+    $('i.delete', $input).click(function(){
+      $input.remove();
+      $selected_chars.toggleClass('selected omit')
+    })
 
     $selected_chars.first().before($input)
 
@@ -140,6 +144,7 @@ function renderInsertArea($selected_chars, my_quote) {
     }).keypress(function(e){
       var key = e.which || e.keyCode;
       if (key === 13){
+        $(this).blur()
         my_quote.insertAnnotation($(this).val(), start, end)
       }
     })
