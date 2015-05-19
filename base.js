@@ -15,7 +15,7 @@ var insertion_mode = false;
 var selection_mode = true;
 
 $(document).ready(function(){
-  var my_quote = new Quote(quote)
+  my_quote = new Quote(quote)
   $quote_chars = renderQuote(my_quote)
 
   var $edit_panel = $('#edit-panel')
@@ -45,11 +45,6 @@ $(document).ready(function(){
   $('blockquote span#quote').mouseup('blockquote span', function(e){
 
     if (!$(e.target).hasClass('char')){
-      return false;
-    }
-
-    if (!selection_mode && !insertion_mode){
-      // TODO: activate button
       return false;
     }
 
@@ -162,7 +157,11 @@ function renderInsertArea(start, end, $selected_chars, my_quote) {
         $del.show()
       })
       .blur(function(e){
-        // $del.hide()
+        if(!$insert.find('input').val().length){
+          $insert.remove();
+          $selected_chars.addClass('selected')
+                         .removeClass('omit')
+        }
       })
       .keypress(function(e){
         var key = e.which || e.keyCode;
