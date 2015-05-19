@@ -138,8 +138,8 @@ function renderEllision(my_quote, $quote_chars) {
 
 function renderInsertArea(start, end, $selected_chars, my_quote) {
 
-    $selected_chars//.toggleClass('selected omit')
-                  .removeClass('selected')
+    var wasSelected = $selected_chars.hasClass('selected')
+    $selected_chars.removeClass('selected')
                    .addClass('omit');
 
     var $insert = $('<span class="insert">[<input>]<i class="fa fa-times-circle delete"></i></span>')
@@ -157,10 +157,13 @@ function renderInsertArea(start, end, $selected_chars, my_quote) {
         $del.show()
       })
       .blur(function(e){
-        if(!$insert.find('input').val().length){
+        var annotation = $insert.find('input').val();
+        if(!annotation.length){
           $insert.remove();
-          $selected_chars.addClass('selected')
+          $selected_chars.addClass(wasSelected ? 'selected' : '')
                          .removeClass('omit')
+        } else {
+          my_quote.insertAnnotation(annotation, start, end)
         }
       })
       .keypress(function(e){
@@ -315,8 +318,8 @@ function Quote(original) {
   }
 
   this.insertAnnotation = function(note, start, end) {
-    console.log(note, start, end)
-    // TODO   
+    console.log("annotation added:", note, start, end)
+    // TODO
   }
 
 }
