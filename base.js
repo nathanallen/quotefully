@@ -48,7 +48,7 @@ $(document).ready(function(){
       return false;
     }
 
-    if (!selection_mode){
+    if (!selection_mode && !insertion_mode){
       // TODO: activate button
       return false;
     }
