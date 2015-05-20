@@ -44,7 +44,7 @@ $(document).ready(function(){
   // handle highlighting
   $('blockquote span#quote').mouseup('blockquote span', function(e){
 
-    if (!$(e.target).hasClass('char')){
+    if (!$(e.target).hasClass('word')){
       return false;
     }
 
@@ -107,8 +107,8 @@ function findIndexesOfHighlight() {
 }
 
 function renderQuote(my_quote) {
-  quote_chars = my_quote.chars.map(function(c,i){
-    return "<span class='char'>" + c + "</span>"
+  quote_chars = my_quote.chars.map(function(word,i){
+    return "<span class='word'>" + word + "</span>"
   })
   return $('blockquote #quote').append(quote_chars).children()
 }
@@ -179,7 +179,7 @@ function renderInsertArea(start, end, $selected_chars, my_quote) {
 function Quote(original) {
   var self = this;
   this.original = original.trim() || ""
-  this.chars = this.original.split('')
+  this.chars = this.original.split(' ')
   var subQuoteIndexes = [];
 
   function meldIn(start, end) {

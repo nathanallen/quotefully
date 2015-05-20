@@ -23,25 +23,25 @@ blockquote  {
   cursor: text;
 }
 
-span#quote.expanded span.char {
+span#quote.expanded span.word {
   color: darkgray;
 }
 
-span#quote.expanded span.char.selected {
+span#quote.expanded span.word.selected {
   color: black;
   background-color: #FE0;
 }
 
-span#quote.expanded span.char:hover {
+span#quote.expanded span.word:hover {
   /*color: black;*/
   /*background-color: #FD0;*/
 }
 
-span#quote.expanded span.char::selection {
+span#quote.expanded span.word::selection {
   background-color: #FE7;
 }
 
-span#quote.expanded span.char::-moz-selection {
+span#quote.expanded span.word::-moz-selection {
   /*color: gold;*/
   background-color: #FE7;
 }
