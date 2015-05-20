@@ -19,11 +19,7 @@ textarea#editor {
   min-height: 6em;
 }
 
-blockquote {
-  cursor: pointer;
-}
-
-blockquote:active  {
+blockquote  {
   cursor: text;
 }
 
