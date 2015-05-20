@@ -2,8 +2,8 @@
 var quote = "We must address ourselves seriously, and not a little fearfully, to the problem of human scale. What is it? How do we stay within it? What sort of technology enhances our humanity? What sort reduces it? The reason is simply that we cannot live except within limits, and these limits are of many kinds: spatial, material, moral, spiritual. The world has room for many people who are content to live as humans, but only for a few intent upon living as giants or as gods."
 
 //temp globals
-var $selected_chars,
-    $quote_chars,
+var $selected_words,
+    $quote_words,
     my_quote;
 
 // jQuery objects
@@ -16,7 +16,7 @@ var selection_mode = true;
 
 $(document).ready(function(){
   my_quote = new Quote(quote)
-  $quote_chars = renderQuote(my_quote)
+  $quote_words = renderQuote(my_quote)
 
   var $edit_panel = $('#edit-panel')
   // expand/collapse quote sections & toggle buttons
@@ -51,39 +51,39 @@ $(document).ready(function(){
     start_and_end = findIndexesOfHighlight(e)
     var start = start_and_end[0],
         end = start_and_end[1];
-    $selected_chars = $quote_chars.slice(start, end+1)
+    $selected_words = $quote_words.slice(start, end+1)
 
     if(insertion_mode) {
-      renderInsertArea(start, end, $selected_chars, my_quote)
+      renderInsertArea(start, end, $selected_words, my_quote)
       return;
     }
 
     if ($(this).hasClass('expanded')) {
-      evaluateHighlight(start, end, $selected_chars, my_quote)
+      evaluateHighlight(start, end, $selected_words, my_quote)
     }
 
   })
   
 });
 
-function evaluateHighlight(start, end, $selected_chars, my_quote) {
+function evaluateHighlight(start, end, $selected_words, my_quote) {
   if (my_quote.isInclusive(start, end)) {
-    unhighlight(start, end, $selected_chars, my_quote);
+    unhighlight(start, end, $selected_words, my_quote);
   } else {
-    highlight(start, end, $selected_chars, my_quote);
+    highlight(start, end, $selected_words, my_quote);
   }
 
-  renderEllision(my_quote, $quote_chars)
+  renderEllision(my_quote, $quote_words)
 }
 
-function unhighlight(start, end, $selected_chars, my_quote){
+function unhighlight(start, end, $selected_words, my_quote){
   my_quote.removeSubQuote(start, end)
-  $selected_chars.removeClass('selected')
+  $selected_words.removeClass('selected')
 }
 
-function highlight(start, end, $selected_chars, my_quote){
+function highlight(start, end, $selected_words, my_quote){
   my_quote.addSubQuote(start, end)
-  $selected_chars.addClass('selected')
+  $selected_words.addClass('selected')
 }
 
 function findIndexesOfHighlight() {
@@ -115,7 +115,7 @@ function findIndexesOfHighlight() {
 }
 
 function renderQuote(my_quote) {
-  quote_chars = my_quote.chars.map(function(word,i){
+  quote_words = my_quote.words.map(function(word,i){
     var hasPunctuation = word[word.length-1].search(/[.!?;]/) !== -1;
     if (hasPunctuation){
       return "<span class='word'>" + word + "</span> "; // outside space
@@ -123,10 +123,10 @@ function renderQuote(my_quote) {
       return "<span class='word'>" + word + " </span>" // inside space
     }
   })
-  return $('blockquote #quote').append(quote_chars).children()
+  return $('blockquote #quote').append(quote_words).children()
 }
 
-function renderEllision(my_quote, $quote_chars) {
+function renderEllision(my_quote, $quote_words) {
   var first, second, start, end,
       qs = my_quote.indexes();
 
@@ -138,21 +138,21 @@ function renderEllision(my_quote, $quote_chars) {
     $expand_btn.hide()
   }
 
-  $quote_chars.removeClass('elide-start elide-end')
+  $quote_words.removeClass('elide-start elide-end')
 
   while(qs.length) {
     last = qs.shift();
     next = qs[0]
     if (last === undefined || next == undefined) { break }
-    $quote_chars.eq(last[1]).addClass('elide-start')
-    $quote_chars.eq(next[0]).addClass('elide-end')
+    $quote_words.eq(last[1]).addClass('elide-start')
+    $quote_words.eq(next[0]).addClass('elide-end')
   }
 }
 
-function renderInsertArea(start, end, $selected_chars, my_quote) {
+function renderInsertArea(start, end, $selected_words, my_quote) {
 
-    var wasSelected = $selected_chars.hasClass('selected')
-    $selected_chars.removeClass('selected')
+    var wasSelected = $selected_words.hasClass('selected')
+    $selected_words.removeClass('selected')
                    .addClass('omit');
 
     var $insert = $('<span class="insert">[<input>]<i class="fa fa-times-circle delete"></i></span>')
@@ -160,10 +160,10 @@ function renderInsertArea(start, end, $selected_chars, my_quote) {
     var $del = $('i.delete', $insert)
     $del.click(function(){
       $insert.remove();
-      $selected_chars.toggleClass('selected omit')
+      $selected_words.toggleClass('selected omit')
     })
 
-    $selected_chars.first().before($insert)
+    $selected_words.first().before($insert)
 
     $('input', $insert).focus()
       .click(function(e){
@@ -173,7 +173,7 @@ function renderInsertArea(start, end, $selected_chars, my_quote) {
         var annotation = $insert.find('input').val();
         if(!annotation.length){
           $insert.remove();
-          $selected_chars.addClass(wasSelected ? 'selected' : '')
+          $selected_words.addClass(wasSelected ? 'selected' : '')
                          .removeClass('omit')
         } else {
           my_quote.insertAnnotation(annotation, start, end)
@@ -192,7 +192,7 @@ function renderInsertArea(start, end, $selected_chars, my_quote) {
 function Quote(original) {
   var self = this;
   this.original = original.trim() || ""
-  this.chars = this.original.split(' ')
+  this.words = this.original.split(' ')
   var subQuoteIndexes = [];
 
   function meldIn(start, end) {
