@@ -108,7 +108,12 @@ function findIndexesOfHighlight() {
 
 function renderQuote(my_quote) {
   quote_chars = my_quote.chars.map(function(word,i){
-    return "<span class='word'>" + word + "</span>"
+    var hasPunctuation = word[word.length-1].search(/[.!?;]/) !== -1;
+    if (hasPunctuation){
+      return "<span class='word'>" + word + "</span> "; // outside space
+    } else {
+      return "<span class='word'>" + word + " </span>" // inside space
+    }
   })
   return $('blockquote #quote').append(quote_chars).children()
 }
