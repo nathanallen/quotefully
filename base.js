@@ -59,23 +59,31 @@ $(document).ready(function(){
     }
 
     if ($(this).hasClass('expanded')) {
-      highlight(start, end, $selected_chars, my_quote)
+      evaluateHighlight(start, end, $selected_chars, my_quote)
     }
 
   })
   
 });
 
-function highlight(start, end, $selected_chars, my_quote) {
+function evaluateHighlight(start, end, $selected_chars, my_quote) {
   if (my_quote.isInclusive(start, end)) {
-    my_quote.removeSubQuote(start, end)
-    $selected_chars.removeClass('selected')
+    unhighlight(start, end, $selected_chars, my_quote);
   } else {
-    my_quote.addSubQuote(start, end)
-    $selected_chars.addClass('selected')
+    highlight(start, end, $selected_chars, my_quote);
   }
 
   renderEllision(my_quote, $quote_chars)
+}
+
+function unhighlight(start, end, $selected_chars, my_quote){
+  my_quote.removeSubQuote(start, end)
+  $selected_chars.removeClass('selected')
+}
+
+function highlight(start, end, $selected_chars, my_quote){
+  my_quote.addSubQuote(start, end)
+  $selected_chars.addClass('selected')
 }
 
 function findIndexesOfHighlight() {
