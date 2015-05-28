@@ -1,13 +1,7 @@
-  var startSelectObj,
-    endSelectObj;
-
-var userSelection;
+var quoteCtrl, userSelection;
 
 $(function(){
-  window.my_quote = new Quote(quote1);
-  window.quote_ctrl = new QuoteCtrl(my_quote);
-  window.view = new View(my_quote, quote_ctrl);
-  view.init();
+  window.quoteCtrl = new QuoteCtrl(quote1, Quote, View);
 })
 
 function UserSelection() {
@@ -37,35 +31,34 @@ function UserSelection() {
   }
 }
 
-function QuoteCtrl(quote) {
-
+function QuoteCtrl(quote_text, QuoteClass, ViewClass) {
   var self = this;
-  this.model = quote;
+  this.model = new QuoteClass(quote_text);
+  this.view = new ViewClass(this.model, this);
+  this.view.init();
 
   this.evaluateSelection = function(e) {
       var s = document.getSelection();
 
       if (!s.toString()){
-        window.startSelectObj = null;
-        window.endSelectObj = null;
         s.empty();
         return false;
       }
 
       window.userSelection = new UserSelection();
-      window.userSelection.evaluate(s, function(start_end){
+      userSelection.evaluate(s, function(start_end){
         self.model.updateSelection(start_end);
-        window.view.renderBlockQuote(self.model.subquotes)
+        self.view.renderBlockQuote(self.model.subquotes)
         s.empty();
       })
 
   }
 }
 
-function View(quote, quote_ctrl) {
+function View(quote, quoteCtrl) {
   var self = this;
-
-  this.ctrl = quote_ctrl;
+  this.model = quote;
+  this.ctrl = quoteCtrl;
   
   this.init = function(){
     this.renderBlockQuote();
