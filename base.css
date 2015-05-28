@@ -23,39 +23,26 @@ blockquote  {
   cursor: text;
 }
 
-span#quote.expanded span.word {
-  color: darkgray;
-}
 
-span#quote.expanded span.word.selected {
+/* HIGHLIGHT */
+span#quote span.selected {
   color: black;
   background-color: #FE0;
 }
 
-span#quote.expanded span.word:hover {
-  /*color: black;*/
-  /*background-color: #FD0;*/
-}
-
-span#quote.expanded span.word::selection {
+span#quote span::selection {
   background-color: #FE7;
 }
 
-span#quote.expanded span.word::-moz-selection {
+span#quote span::-moz-selection {
   /*color: gold;*/
   background-color: #FE7;
 }
 
-span#quote.collapsed span.elide-start:after {
-  content: " [...";
-  display: inline;
-}
+/* END HIGHLIGHT */
 
-span#quote.collapsed span.elide-end:before {
-  content: "] ";
-  display: inline;
-}
 
+/* PANEL BUTTONS */
 #edit-panel  {
   width: 50%;
   margin: 0 auto;
@@ -74,50 +61,4 @@ span#quote.collapsed span.elide-end:before {
   padding-left: .5em;
 }
 
-/* custom icon for .insert */
-.fa-brackets:before {
-  position: relative;
-  content: "[...]";
-  font-size: .8em;
-  top: -.1em;
-}
-
-.fa-select:before {
-  position: relative;
-  content: "\2336";
-  font-size: .8em;
-  top: -.1em;
-}
-
-.active {
-  color: blue !important;
-  border: 1px solid blue !important;
-}
-
-input {
-  background: inherit;
-  border: none;
-  border-bottom: 2px dashed #5B9DD9;
-  outline-color: none;
-  outline-style: none;
-  font-size: inherit;
-  display: inline-block;
-}
-
-span.insert {
-  display: inline-block;
-  position: relative;
-}
-
-span.insert i {
-  color: red;
-  font-size: .8em;
-}
-
-span.insert i:hover {
-  cursor: pointer;
-}
-
-.omit {
-  display: none !important;
-}
+/* END PANEL BUTTONS */
