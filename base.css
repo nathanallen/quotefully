@@ -60,5 +60,21 @@ span#quote span::-moz-selection {
 #edit-panel small {
   padding-left: .5em;
 }
-
 /* END PANEL BUTTONS */
+
+
+/* EXPAND COLLAPSE */
+#quote.collapsed span:not(.selected) {
+  display: none !important;
+}
+
+#quote.collapsed .selected ~ .selected:before {
+  content: "[...]";
+  background-color: antiquewhite;
+}
+/* END EXPAND COLLAPSE */
+
+
+.hidden {
+  display: none !important;
+}

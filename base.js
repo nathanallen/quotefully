@@ -41,11 +41,21 @@ function View(quote, quoteCtrl) {
   this.ctrl = quoteCtrl;
   
   this.init = function(){
+    this.$quote = $("blockquote #quote");
     this.renderBlockQuote();
-    this.turnOnSelectionListener();
+    this.bindSelectionListener();
+    this.bindButtonToggle();
   }
 
-  this.turnOnSelectionListener = function() {
+  this.bindButtonToggle = function(){
+    var $btns = $('#edit-panel .btn');
+    $btns.on('click', function(){
+      $btns.toggleClass('hidden')
+      self.$quote.toggleClass('collapsed expanded')
+    })
+  }
+
+  this.bindSelectionListener = function() {
     function onSelectionMouseUp(e) {
       var s = document.getSelection();
       if (!s.toString()){ s.empty(); return false; }
@@ -60,7 +70,7 @@ function View(quote, quoteCtrl) {
 
   this.renderBlockQuote = function(snippets){
     snippets = snippets || quote.subquotes;
-    $("blockquote #quote").html(
+    this.$quote.html(
       snippets.map(function(snippet){
         return self.renderSubQuote(snippet);
       })
